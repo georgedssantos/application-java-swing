@@ -4,6 +4,33 @@
     xmlns:th="http://www.thymeleaf.org">
     
 <head th:replace="fragments/header :: header"></head>
+<style>
+.custom-file-input ~ .custom-file-label::after {
+    content: "Selecionar Arquivo";
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+</style>
 
 <body><div th:insert="fragments/header :: menu"></div></body>
 <div class="container">
@@ -23,12 +50,23 @@
 			<p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
 			<p th:text="${messageWarning}" th:if="${messageWarning ne null}" class="alert alert-warning"></p>
 			<p th:text="${messageError}" th:if="${messageError ne null}" class="alert alert-danger"></p>
-                <form method="post" th:action="@{/files-TRN/upload}" enctype="multipart/form-data">
+                <!-- <form method="post" th:action="@{/files-TRN/upload}" enctype="multipart/form-data">
                     <div class="form-group">
                         <input type="file" name="file" class="form-control-file">
                     </div>
-                    <button type="submit" class="btn btn-primary">Upload File</button>
-                </form>
+                    <button type="submit" class="btn btn-primary">Enviar Arquivo</button>
+                </form> -->
+                <form method="post" th:action="@{/files-TRN/upload}" enctype="multipart/form-data">
+				  <div class="custom-file">
+				  <!-- <input type="file" class="custom-file-input" id="file" name="file" multiple> -->
+				  	<input type="file" class="custom-file-input" id="file" name="file">
+				    <label class="custom-file-label" for="file">Selecione um arquivo para enviar</label>
+				  </div>
+				  <br/><br/>
+       			  <div>
+          			<button class="btn btn-primary" type="submit">Enviar Arquivo</button> 
+        		</div>
+				</form>
                 <br/>
 	   	<div class="table-responsive">
 			<table class="table table-sm table-bordered table-striped">
@@ -64,6 +102,9 @@
       			</tbody>
       		</table>
       	</div>
-   <div th:include="fragments/footer :: footer"></div> 
+      		<div th:replace="fragments/pagination :: pagination(${files})"></div>
+      		<div th:include="fragments/footer :: footer"></div> 
+      	</div>	
+   </div>
 </div>
 </html>

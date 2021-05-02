@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.veloe.arquivo.model.entity.FileTRN;
 import br.com.veloe.arquivo.service.FileService;
 
 @Controller
@@ -37,7 +38,18 @@ public class FileUploadController {
 	@RequestMapping 
     public String search(HttpServletRequest request, Model model) {
 		
-		model.addAttribute("files", this.fileService.list());
+        int page = 0; //DEFAULT PAGE NUMBER IS 0 (YES IT IS WEIRD)
+        int size = 3; //PAGE SIZE
+        
+        if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
+            page = Integer.parseInt(request.getParameter("page")) - 1;
+        }
+
+        if (request.getParameter("size") != null && !request.getParameter("size").isEmpty()) {
+            size = Integer.parseInt(request.getParameter("size"));
+        }
+		
+		model.addAttribute("files", this.fileService.searchPage(page, size));
         
         return PAGE_FILE_TRN;
     }
@@ -49,19 +61,20 @@ public class FileUploadController {
 
         // check if file is empty
         if (file.isEmpty()) {
-            attributes.addFlashAttribute("messageWarning", "Selecione um arquivo para enviar.");
+            attributes.addFlashAttribute("messageError", "Selecione um arquivo para enviar.");
             return "redirect:/files-TRN";
         }
         
         // check if file is TRN
         if(!org.springframework.util.StringUtils.getFilenameExtension(file.getOriginalFilename()).equalsIgnoreCase("TRN")) {
-            attributes.addFlashAttribute("messageWarning", "Extensão inválida para o arquivo " + fileName + ". Somente arquivo TRN é suportado.");
+            attributes.addFlashAttribute("messageError", "Extensão inválida para o arquivo " + fileName + ". Somente arquivo TRN é suportado.");
             return "redirect:/files-TRN";
         }
 
 		try {
 			Path path = this.fileService.upload(file);
-			this.fileService.readFileTRN(path);
+			FileTRN fileTRN = this.fileService.readFileTRN(path);
+			this.fileService.save(fileTRN);
 		} catch (FileSizeLimitExceededException | MaxUploadSizeExceededException e) {
 			attributes.addFlashAttribute("messageError", "O tamanho do arquivo excede o limite!");
 		} catch (IOException e) {
