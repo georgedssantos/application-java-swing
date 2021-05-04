@@ -1,7 +1,8 @@
 package br.com.veloe.arquivo.controller;
 
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,14 +13,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.veloe.arquivo.model.entity.FileTRN;
+import br.com.veloe.arquivo.model.enums.PassageStatus;
+import br.com.veloe.arquivo.model.enums.TypeCategory;
 import br.com.veloe.arquivo.service.FileService;
 
 @Controller
@@ -27,6 +32,7 @@ import br.com.veloe.arquivo.service.FileService;
 public class FileUploadController {
 	
 	private static final String PAGE_FILE_TRN = "pages/files-trn";
+	private static final String PAGE_FILE_VIEW_TRN = "pages/file-view-trn";
 
 	@Autowired
 	private FileService fileService;
@@ -75,18 +81,38 @@ public class FileUploadController {
 			Path path = this.fileService.upload(file);
 			FileTRN fileTRN = this.fileService.readFileTRN(path);
 			this.fileService.save(fileTRN);
+			attributes.addFlashAttribute("message", "Upload feito com sucesso! " + fileName + '!');
 		} catch (FileSizeLimitExceededException | MaxUploadSizeExceededException e) {
 			attributes.addFlashAttribute("messageError", "O tamanho do arquivo excede o limite!");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			attributes.addFlashAttribute("messageError", "Erro: " + e.getMessage() + '!');
 		}
-        
-        attributes.addFlashAttribute("message", "Upload feito com sucesso! " + fileName + '!');
         
         return "redirect:/files-TRN";
     }
     
-
+	@RequestMapping("{code}")
+	public ModelAndView view(@PathVariable("code") Long idFile) {	
+		ModelAndView modelAndView = new ModelAndView(PAGE_FILE_VIEW_TRN);
+		try {			
+			FileTRN file = this.fileService.getFile(idFile);
+			modelAndView.addObject("file", file);			
+		} catch (Exception e) {
+			modelAndView.addObject("messageError", "Erro: " + e.getMessage());
+		}
+		return modelAndView;
+	}
+	
+	@ModelAttribute("listPassageStatus")
+	public List<PassageStatus> listPassageStatus() {
+		return Arrays.asList(PassageStatus.values());
+	}
+	
+	@ModelAttribute("listTypeCategory")
+	public List<TypeCategory> listTypeCategory() {
+		return Arrays.asList(TypeCategory.values());
+	}
+  
 	@ModelAttribute("version")
 	public String version() {
 		return buildProperties.getVersion();

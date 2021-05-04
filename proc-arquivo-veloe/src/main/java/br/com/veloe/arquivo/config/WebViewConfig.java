@@ -17,7 +17,7 @@ public class WebViewConfig extends Application {
         engine.load(getClass().getResource("/index.html").toExternalForm());
         root.getChildren().add(view);
         
-        Scene scene = new Scene(root,1000,700);
+        Scene scene = new Scene(root,1000,650);
         stage.setScene(scene);
         stage.show();
     }

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.veloe.arquivo.model.enums.PassageStatus;
+import br.com.veloe.arquivo.model.enums.TypeCategory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -44,21 +45,15 @@ public class FileDetailTRN {
 	private String pista;
 	private String categoriaTag;
 	private String categoriaDetectada;
-	private String categoriaCobrada;
+	@Enumerated(EnumType.STRING)
+	private TypeCategory categoriaCobrada;
 	private String valorPassagem;
-	private String statusCobrança;
+	private String statusCobranca;
 	@Enumerated(EnumType.STRING)
 	private PassageStatus statusPassagem;
 	private String flagBateria;
 	private String flagViolacao;
 	private String transacao;
 	private String placa;
-	private String codConcessionariaAntena;
-	private String pracaAntena;
-	private String pistaAntena;
-	private String dataAntena;
-	private String horaAntena;
-	private String motivoImagem;
-	private String imagemLateral1;
 
 }

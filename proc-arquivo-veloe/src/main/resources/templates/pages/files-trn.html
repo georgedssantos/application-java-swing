@@ -69,7 +69,7 @@
 				</form>
                 <br/>
 	   	<div class="table-responsive">
-			<table class="table table-sm table-bordered table-striped">
+			<table class="table table-sm table-hover table-bordered table-striped">
 			 <caption>Lista de arquivos</caption>
       			<thead class="bg-primary">
       				<tr>
@@ -91,7 +91,8 @@
 	   					<td class="text-center" th:text="${file.totalRegistro}"></td>
 	   					<td class="text-right" th:text="|R$ ${{file.valorTotal}}|"></td>
 	   					<td class="text-center align-baseline">
-	   						<a class="btn btn-link">
+	   						<a class="btn btn-link" th:href="@{/files-TRN/{code}(code=${file.id})}" 
+	   								rel="tooltip" data-placement="top" title="Visualizar">
 	   							<span class="glyphicon glyphicon-search"></span>
 	   						</a>
 	   					</td>

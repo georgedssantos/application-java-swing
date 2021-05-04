@@ -15,12 +15,14 @@ public interface FileService {
 	
 	Path upload(MultipartFile file) throws FileSizeLimitExceededException, MaxUploadSizeExceededException, IOException;	
 	
-	FileTRN readFileTRN(Path path) throws IOException;
+	FileTRN readFileTRN(Path path) throws Exception;
 	
 	FileTRN save(FileTRN fileTRN);
 	
 	List<FileTRN> list();
 
 	Page<FileTRN> searchPage(Integer page, Integer size);
+	
+	FileTRN getFile(Long idFile) throws Exception;
 
 }

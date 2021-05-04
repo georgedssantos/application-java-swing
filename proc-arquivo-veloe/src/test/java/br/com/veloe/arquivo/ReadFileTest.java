@@ -16,6 +16,7 @@ import org.springframework.core.io.ClassPathResource;
 import br.com.veloe.arquivo.model.entity.FileDetailTRN;
 import br.com.veloe.arquivo.model.entity.FileTRN;
 import br.com.veloe.arquivo.model.enums.PassageStatus;
+import br.com.veloe.arquivo.model.enums.TypeCategory;
 
 public class ReadFileTest {
 	
@@ -24,7 +25,7 @@ public class ReadFileTest {
 		
 		String UPLOAD_DIR = new ClassPathResource("/src/main/resources/uploads/").getPath();
 		
-		Path path = Paths.get(UPLOAD_DIR + "2021042213465890195.TRN");
+		Path path = Paths.get(UPLOAD_DIR + "2021050415195295554.TRN");
 				
 		List<String> rows = Files.readAllLines(path);
         
@@ -111,46 +112,58 @@ public class ReadFileTest {
         		System.out.println("hora: "+horaFormatada);
         		fileDetailTRN.setHora(horaFormatada);
         		
-        		String pista = row.substring(40,43);
+        		String praca = row.substring(40,44);
+        		System.out.println("praca: "+praca);
+        		fileDetailTRN.setPraca(praca);
+        		
+        		String pista = row.substring(44,47);
         		System.out.println("pista: "+pista);
         		fileDetailTRN.setPista(pista);
         		
-        		String categoriaTag = row.substring(43,45);
+        		String categoriaTag = row.substring(47,49);
         		System.out.println("categoriaTag: "+categoriaTag);
         		fileDetailTRN.setCategoriaTag(categoriaTag);
         		
-        		String categoriaDetectada = row.substring(45,47);
+        		String categoriaDetectada = row.substring(49,51);
         		System.out.println("categoriaDetectada: "+categoriaDetectada);
         		fileDetailTRN.setCategoriaDetectada(categoriaDetectada);
         		
-                String valorPassagem = row.substring(47,55);
+        		String categoriaCobrada = row.substring(51,53);
+        		System.out.println("categoriaCobrada: "+categoriaCobrada);
+        		TypeCategory typeCategory = TypeCategory.getByCodigo(categoriaCobrada);
+        		System.out.println("typeCategory: "+typeCategory.getDescription());
+        		fileDetailTRN.setCategoriaCobrada(typeCategory);
+        		
+                String valorPassagem = row.substring(53,61);
                 System.out.println("valorPassagem: "+valorPassagem);
                 valorPassagem = valorPassagem.replaceAll("^0*", "");            
                 valorPassagem = valorPassagem.substring(0, valorPassagem.length()-2) + "," + valorPassagem.substring(valorPassagem.length()-2);
                 System.out.println("valorPassagem: "+valorPassagem);
                 fileDetailTRN.setValorPassagem(valorPassagem);
                 
-          		String statusCobranca = row.substring(55,56);
+          		String statusCobranca = row.substring(61,62);
+          		System.out.println("statusCobrança: "+ statusCobranca);
           		statusCobranca = statusCobranca.equalsIgnoreCase("0") ? "Normal" : "Corrigida";
         		System.out.println("statusCobrança: "+ statusCobranca);
-        		fileDetailTRN.setStatusCobrança(statusCobranca);
+        		fileDetailTRN.setStatusCobranca(statusCobranca);
         		
-          		String statusPassagem = row.substring(56,57);
+          		String statusPassagem = row.substring(62,63);
+          		System.out.println("statusPassagem: "+statusPassagem);
           		PassageStatus passageStatusEnum = PassageStatus.getByCodigo(Integer.valueOf(statusPassagem));
         		System.out.println("statusPassagem: "+passageStatusEnum.getDescription());
         		fileDetailTRN.setStatusPassagem(passageStatusEnum);
         		
-          		String flagBateria = row.substring(57,58);
+          		String flagBateria = row.substring(63,64);
           		flagBateria = flagBateria.equalsIgnoreCase("0") ? "Ok" : "Bateria Baixa";
         		System.out.println("flagBateria: "+ flagBateria);
         		fileDetailTRN.setFlagBateria(flagBateria);
         		
-          		String flagViolacao = row.substring(58,59);
-          		flagViolacao = flagViolacao.equalsIgnoreCase("0") ? "Ok" : "Violada";
+          		String flagViolacao = row.substring(64,65);
+          		flagViolacao = flagViolacao.equalsIgnoreCase("0") ? "0-Não Violada" : "1-Violada";
         		System.out.println("flagViolacao: "+ flagViolacao);
         		fileDetailTRN.setFlagViolacao(flagViolacao);
         		
-          		String transacao = row.substring(59,72);
+          		String transacao = row.substring(65,72);
         		System.out.println("transacao: "+transacao);
         		fileDetailTRN.setTransacao(transacao);
         		
@@ -162,7 +175,6 @@ public class ReadFileTest {
         		
           		String codConcessionariaAntena = row.substring(83,88);
         		System.out.println("codConcessionariaAntena: "+codConcessionariaAntena);
-        		fileDetailTRN.setCodConcessionariaAntena(codConcessionariaAntena);
         		
         		details.add(fileDetailTRN);
         	}
