@@ -17,7 +17,7 @@ public interface FileService {
 	
 	FileTRN readFileTRN(Path path) throws Exception;
 	
-	FileTRN save(FileTRN fileTRN);
+	void save(FileTRN fileTRN);
 	
 	List<FileTRN> list();
 

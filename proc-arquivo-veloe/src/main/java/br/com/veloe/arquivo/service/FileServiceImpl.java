@@ -1,5 +1,6 @@
 package br.com.veloe.arquivo.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,18 @@ public class FileServiceImpl implements FileService {
 	@Autowired
 	private FileDetailTRNRepository fileDetailTRNRepository;
 	
-	private final String UPLOAD_DIR = new ClassPathResource("/src/main/resources/uploads/").getPath();
-
+    @Value("${file.path}")
+    private String filePath;
+	
 	@Override
-	public Path upload(MultipartFile file) throws FileSizeLimitExceededException, MaxUploadSizeExceededException, IOException {		
+	public Path upload(MultipartFile file) throws FileSizeLimitExceededException, MaxUploadSizeExceededException, IOException {	
+		//String filePath = new ClassPathResource("/src/main/resources/files/").getPath();
+		File dirPath = new File(filePath);
+        if (!dirPath.exists()) {
+        	dirPath.mkdirs();
+        }
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        Path path = Paths.get(UPLOAD_DIR + fileName);
+        Path path = Paths.get(filePath + fileName);
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
         return path;
 	}
@@ -205,11 +212,13 @@ public class FileServiceImpl implements FileService {
 	}
 	
 	@Override
-	public FileTRN save(FileTRN fileTRN) {
-		fileTRN.setId(null);
-		this.fileTRNRepository.save(fileTRN);
-		saveFileDetail(fileTRN.getId(), fileTRN.getFileDetails());
-		return this.fileTRNRepository.save(fileTRN);
+	public void save(FileTRN fileTRN) {
+		Optional<FileTRN> fileExistence = this.fileTRNRepository.findBySequencial(fileTRN.getSequencial());
+		if(!fileExistence.isPresent()) {
+			fileTRN.setId(null);
+			this.fileTRNRepository.save(fileTRN);
+			saveFileDetail(fileTRN.getId(), fileTRN.getFileDetails());
+		}
 	}
 	
 	private void saveFileDetail(Long idFile, List<FileDetailTRN> details) {
@@ -249,7 +258,5 @@ public class FileServiceImpl implements FileService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
 		return formatter.format(localTime);
 	}
-
-
 
 }
