@@ -8,7 +8,6 @@
 
 ### Requisitos
 - Importa dados do arquivo DATA.csv
-- Utilizar a classe `BancoCentralService` para realizar o "envio" dos dados.
 
 * Maven Project
 * Java Swing
