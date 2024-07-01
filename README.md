@@ -1,5 +1,5 @@
 # application-java-swing
-📚 ☕️ Sample Java Swing application
+📚 ☕️ Sample Java Swing Application
 
 
 ![alt tag](https://github.com/georgedssantos/application-java-swing/blob/main/documentacao/tela-1.PNG)
