@@ -2,7 +2,7 @@
 📚 ☕️ Sample Java Swing application
 
 
-![alt tag](https://raw.githubusercontent.com/gesisantos/application-java-swing/master/documentacao/tela-1.PNG)
+![alt tag](https://github.com/georgedssantos/application-java-swing/blob/main/documentacao/tela-1.PNG)
 
 * Maven Project
 * Java Swing
