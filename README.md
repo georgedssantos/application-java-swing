@@ -10,8 +10,9 @@
 * Maven Project
 * Java Swing
 
-### Requisitos para rodar o JAR após manutenção
-- Abrir o arquivo gerado pelo Maven compactado JAR pelo 7-Zip
+### Requisitos
+- Importa dados arquivo DATA.csv que contém Agência, Conta e Saldo e exibe no JTable com ID`s.
+- Para rodar o JAR após manutenção:
 - Dentro do diretório META-INF/MANIFEST.MF deve ser adiocionado a linha `Main-Class: br.com.banco.MainApp`
 - Exemplo do conteúdo do arquivo MANIFEST.MF:
 - `Manifest-Version: 1.0`
