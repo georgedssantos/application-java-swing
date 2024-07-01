@@ -10,7 +10,7 @@
 * Maven Project
 * Java Swing
 
-### Requisitos para rodar o JAR
+### Requisitos para rodar o JAR após manutenção
 - Abrir o arquivo gerado pelo Maven compactado JAR pelo 7-Zip
 - Dentro do diretório META-INF/MANIFEST.MF deve ser adiocionado a linha:
 - Main-Class: br.com.banco.MainApp
