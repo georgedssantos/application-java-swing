@@ -11,7 +11,7 @@ Para rodar o JAR
 Abrir o arquivo gerado pelo Maven compactado JAR pelo 7-Zip
 Dentro do diretório META-INF/MANIFEST.MF deve ser adiocionado a linha:
 Main-Class: br.com.banco.MainApp
-Exemplo do conteúdo do arquivo MANIFEST.MF:
+Exemplo do conteúdo do arquivo MANIFEST.MF: </br>
 `Manifest-Version: 1.0`
 `Main-Class: br.com.banco.MainApp`
 
